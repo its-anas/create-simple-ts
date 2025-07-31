@@ -1,10 +1,10 @@
 {
-  "name": "create-ts-project",
+  "name": "create-simple-ts",
   "version": "1.0.0",
   "description": "CLI tool to create a simple TypeScript project template",
   "main": "src/index.ts",
   "bin": {
-    "ts-project": "./bin/cli.js"
+    "create-simple-ts": "./bin/cli.js"
   },
   "files": [
     "bin/",
