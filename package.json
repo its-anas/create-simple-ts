@@ -1,5 +1,5 @@
 {
-  "name": "create-ts-project",
+  "name": "ts-project",
   "version": "1.0.0",
   "description": "CLI tool to create a simple TypeScript project template",
   "main": "src/index.ts",
