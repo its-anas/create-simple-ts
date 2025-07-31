@@ -3,6 +3,7 @@
 const prompts = require('prompts');
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 function copyTemplate(templateDir, targetDir, projectName, packageManager) {
   const files = fs.readdirSync(templateDir, { withFileTypes: true });
@@ -28,10 +29,8 @@ function copyTemplate(templateDir, targetDir, projectName, packageManager) {
   }
 }
 
-async function main() {
-  console.log('🚀 Create Simple TypeScript Project\n');
-
-  const response = await prompts([
+function getUserInput() {
+  return prompts([
     {
       type: 'text',
       name: 'projectName',
@@ -54,6 +53,45 @@ async function main() {
       initial: 0
     }
   ]);
+}
+
+function createProjectDirectory(projectPath) {
+  fs.mkdirSync(projectPath);
+}
+
+function installDependencies(projectPath, packageManager, projectName) {
+  console.log('📦 Installing dependencies...');
+  
+  try {
+    execSync(`${packageManager} install`, { 
+      cwd: projectPath, 
+      stdio: 'inherit' 
+    });
+    console.log('✅ Dependencies installed successfully!');
+  } catch (error) {
+    console.error('❌ Failed to install dependencies:', error.message);
+    console.log('You can install them manually by running:');
+    console.log(`  cd ${projectName}`);
+    console.log(`  ${packageManager} install`);
+  }
+}
+
+function showSuccessMessage(projectPath, projectName, packageManager) {
+  console.log('✅ Project created successfully!');
+  console.log(`📁 Created in: ${projectPath}`);
+  console.log('');
+}
+
+function showNextSteps(projectName, packageManager) {
+  console.log('Next steps:');
+  console.log(`  cd ${projectName}`);
+  console.log(`  ${packageManager} run dev`);
+}
+
+async function main() {
+  console.log('🚀 Create Simple TypeScript Project\n');
+
+  const response = await getUserInput();
 
   if (!response.projectName) {
     console.log('❌ Cancelled');
@@ -64,19 +102,12 @@ async function main() {
   const templateDir = path.join(__dirname, '..', 'template');
   
   try {
-    // Create project directory
-    fs.mkdirSync(projectPath);
-
-    // Copy template files
+    createProjectDirectory(projectPath);
     copyTemplate(templateDir, projectPath, response.projectName, response.packageManager);
-
-    console.log('✅ Project created successfully!');
-    console.log(`📁 Created in: ${projectPath}`);
+    showSuccessMessage(projectPath, response.projectName, response.packageManager);
+    installDependencies(projectPath, response.packageManager, response.projectName);
     console.log('');
-    console.log('Next steps:');
-    console.log(`  cd ${response.projectName}`);
-    console.log(`  ${response.packageManager} install`);
-    console.log(`  ${response.packageManager} run dev`);
+    showNextSteps(response.projectName, response.packageManager);
 
   } catch (error) {
     console.error('❌ Error creating project:', error.message);
