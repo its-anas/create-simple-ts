@@ -1,19 +1,21 @@
-# create-simple-ts
+# ts-project
 
 Create a simple TypeScript project with one command.
 
 ## Usage
 
 ```bash
-npx create-simple-ts
+npx ts-project
 ```
 
 Or with pnpm:
+
 ```bash
 pnpm create simple-ts
 ```
 
 This will:
+
 - Ask for your project name
 - Ask for your preferred package manager (npm or pnpm)
 - Create a new folder with TypeScript setup

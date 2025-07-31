@@ -4,7 +4,7 @@
   "description": "CLI tool to create a simple TypeScript project template",
   "main": "src/index.ts",
   "bin": {
-    "create-simple-ts": "./bin/cli.js"
+    "ts-project": "./bin/cli.js"
   },
   "files": [
     "bin/",
